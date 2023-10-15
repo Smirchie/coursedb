@@ -1,0 +1,438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Pol_Party_courseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Обращение">
+          <Key>
+            <PropertyRef Name="Идентификатор_Обращения" />
+          </Key>
+          <Property Name="Идентификатор_Обращения" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="32" />
+          <Property Name="Пол" Type="bit" />
+          <Property Name="Текст" Type="nvarchar" MaxLength="2048" Nullable="false" />
+          <Property Name="Телефон" Type="nvarchar" MaxLength="11" Nullable="false" />
+          <Property Name="Электронная_Почта" Type="nvarchar" MaxLength="32" />
+          <Property Name="Идентификатор_Отделения" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Отделение">
+          <Key>
+            <PropertyRef Name="Идентификатор_Отделения" />
+          </Key>
+          <Property Name="Идентификатор_Отделения" Type="int" Nullable="false" />
+          <Property Name="Номер_Региона" Type="int" Nullable="false" />
+          <Property Name="Адрес" Type="nvarchar" MaxLength="128" />
+          <Property Name="Сайт" Type="nvarchar" MaxLength="32" />
+          <Property Name="Телефон" Type="nvarchar" MaxLength="11" />
+          <Property Name="Идентификатор_Члена_Партии" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Проект">
+          <Key>
+            <PropertyRef Name="Идентификатор_Проекта" />
+          </Key>
+          <Property Name="Идентификатор_Проекта" Type="int" Nullable="false" />
+          <Property Name="Название" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Описание" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Финансирование" Type="money" Nullable="false" />
+          <Property Name="Идентификаторы_Члена_Партии" Type="int" Nullable="false" />
+          <Property Name="Идентификатор_Отделения" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Событие">
+          <Key>
+            <PropertyRef Name="Идентификатор_События" />
+          </Key>
+          <Property Name="Идентификатор_События" Type="int" Nullable="false" />
+          <Property Name="Дата_Проведения" Type="date" Nullable="false" />
+          <Property Name="Описание" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Идентификатор_Члена_Партии" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Член_Партии">
+          <Key>
+            <PropertyRef Name="Идентификатор_Члена_Партии" />
+          </Key>
+          <Property Name="Идентификатор_Члена_Партии" Type="int" Nullable="false" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="32" />
+          <Property Name="Пол" Type="bit" />
+          <Property Name="Дата_Рождения" Type="date" />
+          <Property Name="Телефон" Type="nvarchar" MaxLength="11" />
+          <Property Name="Электронная_Почта" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <Association Name="FK_Обращение_Отделение">
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="1" />
+          <End Role="Обращение" Type="Self.Обращение" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Отделение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Principal>
+            <Dependent Role="Обращение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Отделение_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Отделение">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Проект_Отделение">
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="1" />
+          <End Role="Проект" Type="Self.Проект" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Отделение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Principal>
+            <Dependent Role="Проект">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Проект_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Проект" Type="Self.Проект" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Проект">
+              <PropertyRef Name="Идентификаторы_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Событие_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Событие" Type="Self.Событие" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Событие">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Pol_Party_courseModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Обращение" EntityType="Self.Обращение" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Отделение" EntityType="Self.Отделение" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Проект" EntityType="Self.Проект" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Событие" EntityType="Self.Событие" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Член_Партии" EntityType="Self.Член_Партии" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Обращение_Отделение" Association="Self.FK_Обращение_Отделение">
+            <End Role="Отделение" EntitySet="Отделение" />
+            <End Role="Обращение" EntitySet="Обращение" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Отделение_Член_Партии" Association="Self.FK_Отделение_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Отделение" EntitySet="Отделение" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Проект_Отделение" Association="Self.FK_Проект_Отделение">
+            <End Role="Отделение" EntitySet="Отделение" />
+            <End Role="Проект" EntitySet="Проект" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Проект_Член_Партии" Association="Self.FK_Проект_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Проект" EntitySet="Проект" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Событие_Член_Партии" Association="Self.FK_Событие_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Событие" EntitySet="Событие" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Pol_Party_courseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Обращение">
+          <Key>
+            <PropertyRef Name="Идентификатор_Обращения" />
+          </Key>
+          <Property Name="Идентификатор_Обращения" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Отчество" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Пол" Type="Boolean" />
+          <Property Name="Текст" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Телефон" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Электронная_Почта" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Идентификатор_Отделения" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Отделение" Relationship="Self.FK_Обращение_Отделение" FromRole="Обращение" ToRole="Отделение" />
+        </EntityType>
+        <EntityType Name="Отделение">
+          <Key>
+            <PropertyRef Name="Идентификатор_Отделения" />
+          </Key>
+          <Property Name="Идентификатор_Отделения" Type="Int32" Nullable="false" />
+          <Property Name="Номер_Региона" Type="Int32" Nullable="false" />
+          <Property Name="Адрес" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Сайт" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Телефон" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Идентификатор_Члена_Партии" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Обращение" Relationship="Self.FK_Обращение_Отделение" FromRole="Отделение" ToRole="Обращение" />
+          <NavigationProperty Name="Член_Партии" Relationship="Self.FK_Отделение_Член_Партии" FromRole="Отделение" ToRole="Член_Партии" />
+          <NavigationProperty Name="Проект" Relationship="Self.FK_Проект_Отделение" FromRole="Отделение" ToRole="Проект" />
+        </EntityType>
+        <EntityType Name="Проект">
+          <Key>
+            <PropertyRef Name="Идентификатор_Проекта" />
+          </Key>
+          <Property Name="Идентификатор_Проекта" Type="Int32" Nullable="false" />
+          <Property Name="Название" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Описание" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Финансирование" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Идентификаторы_Члена_Партии" Type="Int32" Nullable="false" />
+          <Property Name="Идентификатор_Отделения" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Отделение" Relationship="Self.FK_Проект_Отделение" FromRole="Проект" ToRole="Отделение" />
+          <NavigationProperty Name="Член_Партии" Relationship="Self.FK_Проект_Член_Партии" FromRole="Проект" ToRole="Член_Партии" />
+        </EntityType>
+        <EntityType Name="Событие">
+          <Key>
+            <PropertyRef Name="Идентификатор_События" />
+          </Key>
+          <Property Name="Идентификатор_События" Type="Int32" Nullable="false" />
+          <Property Name="Дата_Проведения" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Описание" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Идентификатор_Члена_Партии" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Член_Партии" Relationship="Self.FK_Событие_Член_Партии" FromRole="Событие" ToRole="Член_Партии" />
+        </EntityType>
+        <EntityType Name="Член_Партии">
+          <Key>
+            <PropertyRef Name="Идентификатор_Члена_Партии" />
+          </Key>
+          <Property Name="Идентификатор_Члена_Партии" Type="Int32" Nullable="false" />
+          <Property Name="Имя" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Отчество" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Пол" Type="Boolean" />
+          <Property Name="Дата_Рождения" Type="DateTime" Precision="0" />
+          <Property Name="Телефон" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+          <Property Name="Электронная_Почта" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Отделение" Relationship="Self.FK_Отделение_Член_Партии" FromRole="Член_Партии" ToRole="Отделение" />
+          <NavigationProperty Name="Проект" Relationship="Self.FK_Проект_Член_Партии" FromRole="Член_Партии" ToRole="Проект" />
+          <NavigationProperty Name="Событие" Relationship="Self.FK_Событие_Член_Партии" FromRole="Член_Партии" ToRole="Событие" />
+        </EntityType>
+        <Association Name="FK_Обращение_Отделение">
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="1" />
+          <End Role="Обращение" Type="Self.Обращение" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Отделение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Principal>
+            <Dependent Role="Обращение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Отделение_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Отделение">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Проект_Отделение">
+          <End Role="Отделение" Type="Self.Отделение" Multiplicity="1" />
+          <End Role="Проект" Type="Self.Проект" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Отделение">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Principal>
+            <Dependent Role="Проект">
+              <PropertyRef Name="Идентификатор_Отделения" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Проект_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Проект" Type="Self.Проект" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Проект">
+              <PropertyRef Name="Идентификаторы_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Событие_Член_Партии">
+          <End Role="Член_Партии" Type="Self.Член_Партии" Multiplicity="1" />
+          <End Role="Событие" Type="Self.Событие" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Член_Партии">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Principal>
+            <Dependent Role="Событие">
+              <PropertyRef Name="Идентификатор_Члена_Партии" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Pol_Party_courseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Обращение" EntityType="Self.Обращение" />
+          <EntitySet Name="Отделение" EntityType="Self.Отделение" />
+          <EntitySet Name="Проект" EntityType="Self.Проект" />
+          <EntitySet Name="Событие" EntityType="Self.Событие" />
+          <EntitySet Name="Член_Партии" EntityType="Self.Член_Партии" />
+          <AssociationSet Name="FK_Обращение_Отделение" Association="Self.FK_Обращение_Отделение">
+            <End Role="Отделение" EntitySet="Отделение" />
+            <End Role="Обращение" EntitySet="Обращение" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Отделение_Член_Партии" Association="Self.FK_Отделение_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Отделение" EntitySet="Отделение" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Проект_Отделение" Association="Self.FK_Проект_Отделение">
+            <End Role="Отделение" EntitySet="Отделение" />
+            <End Role="Проект" EntitySet="Проект" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Проект_Член_Партии" Association="Self.FK_Проект_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Проект" EntitySet="Проект" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Событие_Член_Партии" Association="Self.FK_Событие_Член_Партии">
+            <End Role="Член_Партии" EntitySet="Член_Партии" />
+            <End Role="Событие" EntitySet="Событие" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Pol_Party_courseModelStoreContainer" CdmEntityContainer="Pol_Party_courseEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Обращение">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.Обращение">
+              <MappingFragment StoreEntitySet="Обращение">
+                <ScalarProperty Name="Идентификатор_Обращения" ColumnName="Идентификатор_Обращения" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Пол" ColumnName="Пол" />
+                <ScalarProperty Name="Текст" ColumnName="Текст" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Электронная_Почта" ColumnName="Электронная_Почта" />
+                <ScalarProperty Name="Идентификатор_Отделения" ColumnName="Идентификатор_Отделения" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Отделение">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.Отделение">
+              <MappingFragment StoreEntitySet="Отделение">
+                <ScalarProperty Name="Идентификатор_Отделения" ColumnName="Идентификатор_Отделения" />
+                <ScalarProperty Name="Номер_Региона" ColumnName="Номер_Региона" />
+                <ScalarProperty Name="Адрес" ColumnName="Адрес" />
+                <ScalarProperty Name="Сайт" ColumnName="Сайт" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Идентификатор_Члена_Партии" ColumnName="Идентификатор_Члена_Партии" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Проект">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.Проект">
+              <MappingFragment StoreEntitySet="Проект">
+                <ScalarProperty Name="Идентификатор_Проекта" ColumnName="Идентификатор_Проекта" />
+                <ScalarProperty Name="Название" ColumnName="Название" />
+                <ScalarProperty Name="Описание" ColumnName="Описание" />
+                <ScalarProperty Name="Финансирование" ColumnName="Финансирование" />
+                <ScalarProperty Name="Идентификаторы_Члена_Партии" ColumnName="Идентификаторы_Члена_Партии" />
+                <ScalarProperty Name="Идентификатор_Отделения" ColumnName="Идентификатор_Отделения" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Событие">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.Событие">
+              <MappingFragment StoreEntitySet="Событие">
+                <ScalarProperty Name="Идентификатор_События" ColumnName="Идентификатор_События" />
+                <ScalarProperty Name="Дата_Проведения" ColumnName="Дата_Проведения" />
+                <ScalarProperty Name="Описание" ColumnName="Описание" />
+                <ScalarProperty Name="Идентификатор_Члена_Партии" ColumnName="Идентификатор_Члена_Партии" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Член_Партии">
+            <EntityTypeMapping TypeName="Pol_Party_courseModel.Член_Партии">
+              <MappingFragment StoreEntitySet="Член_Партии">
+                <ScalarProperty Name="Идентификатор_Члена_Партии" ColumnName="Идентификатор_Члена_Партии" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Пол" ColumnName="Пол" />
+                <ScalarProperty Name="Дата_Рождения" ColumnName="Дата_Рождения" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Электронная_Почта" ColumnName="Электронная_Почта" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
