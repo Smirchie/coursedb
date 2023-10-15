@@ -11,7 +11,27 @@ namespace coursedb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+        }
 
+        protected void DeptRowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "DeleteRow")
+            {
+                Util.DeleteFromTable(Util.GetIdFromGridView(e, DeptGridView), "Dept");
+                DeptGridView.DataBind();
+            }
+            else if (e.CommandName == "EditRow")
+            {
+                InsertOrEditForm.tableId = 3;
+                InsertOrEditForm.values = Util.GetRowAsArray(e, DeptGridView);
+                Response.Redirect("~/InsertOrEditForm.aspx");
+            }
+        }
+
+        protected void InsertDept(object sender, EventArgs e)
+        {
+            InsertOrEditForm.tableId = 3;
+            Response.Redirect("~/InsertOrEditForm.aspx");
         }
     }
 }

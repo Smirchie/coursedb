@@ -36,7 +36,42 @@ namespace coursedb
                         AddProjectElems();
                         break;
                     }
+                case 3:
+                    {
+                        AddDeptElems();
+                        break;
+                    }
+                case 4:
+                    {
+                        AddAppealElems();
+                        break;
+                    }
             }
+        }
+
+        private void AddAppealElems()
+        {
+            NewDropDownList("DeptId", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"));
+            NewTextBox("LName");
+            NewTextBox("FName");
+            NewTextBox("MName");
+            NewDropDownList("Sex", new string[] { "Мужской", "Женский" });
+            NewTextBox("Phone");
+            NewTextBox("E-mail");
+            NewTextBox("AppealText");
+            NewApplyButton();
+            NewCancelButton();
+        }
+
+        private void AddDeptElems()
+        {
+            NewTextBox("RegionId");
+            NewTextBox("Address");
+            NewTextBox("Site");
+            NewTextBox("Phone");
+            NewDropDownList("Head", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"));
+            NewApplyButton();
+            NewCancelButton();
         }
 
         private void AddProjectElems()
@@ -89,6 +124,16 @@ namespace coursedb
                 case 2:
                     {
                         Response.Redirect("~/Projects.aspx");
+                        break;
+                    }
+                case 3:
+                    {
+                        Response.Redirect("~/Departments.aspx");
+                        break;
+                    }
+                case 4:
+                    {
+                        Response.Redirect("~/Appeals.aspx");
                         break;
                     }
             }
@@ -146,13 +191,19 @@ namespace coursedb
                             }
                         default:
                             {
-                                lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
+                                if (tableId == 4)
+                                {
+                                    lst.Add((ctrl as DropDownList).SelectedValue);
+                                }
+                                else
+                                {
+                                    lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
+                                }
                                 break;
                             }
                     }
                 }
             }
-
             try
             {
                 switch (tableId)
@@ -181,6 +232,16 @@ namespace coursedb
                     case 2:
                         {
                             Util.InsertOrUpdateProject(lst.ToArray());
+                            break;
+                        }
+                    case 3:
+                        {
+                            Util.InsertOrUpdateDept(lst.ToArray());
+                            break;
+                        }
+                    case 4:
+                        {
+                            Util.InsertOrUpdateAppeal(lst.ToArray());
                             break;
                         }
                 }

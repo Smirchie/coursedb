@@ -88,6 +88,35 @@ namespace coursedb
             Exec(cmd);
         }
 
+        public static void InsertOrUpdateDept(object[] values)
+        {
+            SqlCommand cmd = new SqlCommand("InsertOrUpdateDept", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Id", values[0]);
+            cmd.Parameters.AddWithValue("@RegionId", values[1]);
+            cmd.Parameters.AddWithValue("@Address", values[2]);
+            cmd.Parameters.AddWithValue("@Site", values[3]);
+            cmd.Parameters.AddWithValue("@Phone", values[4]);
+            cmd.Parameters.AddWithValue("@MemberId", values[5]);
+            Exec(cmd);
+        }
+
+        public static void InsertOrUpdateAppeal(object[] values)
+        {
+            SqlCommand cmd = new SqlCommand("InsertOrUpdateAppeal", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Id", values[0]);
+            cmd.Parameters.AddWithValue("@DeptId", values[1]);
+            cmd.Parameters.AddWithValue("@LastName", values[2]);
+            cmd.Parameters.AddWithValue("@FirstName", values[3]);
+            cmd.Parameters.AddWithValue("@MiddleName", values[4]);
+            cmd.Parameters.AddWithValue("@Sex", values[5]);
+            cmd.Parameters.AddWithValue("@Phone", values[6]);
+            cmd.Parameters.AddWithValue("@Email", values[7]);
+            cmd.Parameters.AddWithValue("@Text", values[8]);
+            Exec(cmd);
+        }
+
         public static void InsertOrUpdateProject(object[] values)
         {
             SqlCommand cmd = new SqlCommand("InsertOrUpdateProject", con);
