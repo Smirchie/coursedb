@@ -30,7 +30,12 @@ namespace coursedb
             else if (e.CommandName == "EditRow")
             {
                 InsertOrEditForm.tableId = 1;
-                InsertOrEditForm.values = Util.GetRowAsArray(e, EventGridView);
+                object[] values = Util.GetValuesFromRow($"Событие WHERE Идентификатор_События = {Util.GetIdFromGridView(e, EventGridView)}", "*");
+                for (int i = 0; i < 3; i++)
+                {
+                    InsertOrEditForm.values[i] = values[i];
+                }
+                InsertOrEditForm.values[3] = Util.GetValuesFromTable($"[Связь Член_Партии Событие] WHERE Идентификатор_События = {Util.GetIdFromGridView(e, EventGridView)}", "Идентификатор_Члена_Партии");
                 Response.Redirect("~/InsertOrEditForm.aspx");
             }
             else if (e.CommandName == "ShowMembers")

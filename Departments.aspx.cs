@@ -23,7 +23,11 @@ namespace coursedb
             else if (e.CommandName == "EditRow")
             {
                 InsertOrEditForm.tableId = 3;
-                InsertOrEditForm.values = Util.GetRowAsArray(e, DeptGridView);
+                object[] values = Util.GetValuesFromRow($"Отделение WHERE Идентификатор_Отделения = {Util.GetIdFromGridView(e, DeptGridView)}", "*");
+                for (int i = 0; i < 6; i++)
+                {
+                    InsertOrEditForm.values[i] = values[i];
+                }
                 Response.Redirect("~/InsertOrEditForm.aspx");
             }
         }

@@ -31,6 +31,7 @@
         <SortedDescendingCellStyle BackColor="#FFFDF8" />
         <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
     </asp:GridView>
+    <asp:SqlDataSource ID="tegaega" runat="server"></asp:SqlDataSource>
     <asp:Button ID="InsertButton" runat="server" OnClick="InsertDept" Text="Добавить" />
     <asp:TextBox TextMode="MultiLine" runat ="server" id="AppealTextBox"></asp:TextBox>
     <asp:SqlDataSource ID="AppealDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:Pol_Party_courseConnectionString %>" SelectCommand="SELECT * FROM [Обращение] ORDER BY [Идентификатор_Обращения]"></asp:SqlDataSource>

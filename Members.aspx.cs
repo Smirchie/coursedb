@@ -15,6 +15,26 @@ namespace coursedb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            try
+            {
+                foreach (GridViewRow row in MemberGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[4].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "М";
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
 
         protected void MemberRowCommand(object sender, GridViewCommandEventArgs e)
@@ -23,11 +43,29 @@ namespace coursedb
             {
                 Util.DeleteFromTable(Util.GetIdFromGridView(e, MemberGridView), "Member");
                 MemberGridView.DataBind();
+                foreach (GridViewRow row in MemberGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[4].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "М";
+                    }
+                }
             }
             else if (e.CommandName == "EditRow")
             {
                 InsertOrEditForm.tableId = 0;
-                InsertOrEditForm.values = Util.GetRowAsArray(e, MemberGridView);
+                object[] values = Util.GetValuesFromRow($"Член_Партии WHERE Идентификатор_Члена_Партии = {Util.GetIdFromGridView(e, MemberGridView)}", "*");
+                for (int i = 0; i < 8; i++)
+                {
+                    InsertOrEditForm.values[i] = values[i];
+                }
                 Response.Redirect("~/InsertOrEditForm.aspx");
             }
             else if (e.CommandName == "ShowEvents")

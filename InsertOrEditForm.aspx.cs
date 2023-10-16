@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace coursedb
     public partial class InsertOrEditForm : System.Web.UI.Page
     {
         public static int tableId = -1;
-        public static object[] values;
+        public static object[] values = new object[10];
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -51,64 +52,107 @@ namespace coursedb
 
         private void AddAppealElems()
         {
-            NewDropDownList("DeptId", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"));
-            NewTextBox("LName");
-            NewTextBox("FName");
-            NewTextBox("MName");
-            NewDropDownList("Sex", new string[] { "Мужской", "Женский" });
-            NewTextBox("Phone");
-            NewTextBox("E-mail");
-            NewTextBox("AppealText");
+            NewDropDownList("DeptId", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"), values[1]);
+            NewTextBox("LName", values[2]);
+            NewTextBox("FName", values[3]);
+            NewTextBox("MName", values[4]);
+            NewDropDownList("Sex", new string[] { "Мужской", "Женский" }, values[5]);
+            NewTextBox("Phone", values[6]);
+            NewTextBox("E-mail", values[7]);
+            NewTextBox("AppealText", values[8]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddDeptElems()
         {
-            NewTextBox("RegionId");
-            NewTextBox("Address");
-            NewTextBox("Site");
-            NewTextBox("Phone");
-            NewDropDownList("Head", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"));
+            if (values[1] != null)
+            {
+                NewTextBox("RegionId", values[1].ToString());
+            }
+            else
+            {
+                NewTextBox("RegionId", null);
+            }
+            NewTextBox("Address", values[2]);
+            NewTextBox("Site", values[3]);
+            NewTextBox("Phone", values[4]);
+            NewDropDownList("Head", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[5]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddProjectElems()
         {
-            NewTextBox("Name");
-            NewTextBox("Desc");
-            NewTextBox("Finance");
-            NewDropDownList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"));
+            NewTextBox("Name", values[1]);
+            NewTextBox("Desc", values[2]);
+            NewTextBox("Finance", values[3]);
+            NewDropDownList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddMemberElems()
         {
-            NewTextBox("LName");
-            NewTextBox("FName");
-            NewTextBox("MName");
-            NewDropDownList("Sex", new string[] { "Мужской", "Женский" });
-            NewCalendar("Birthday");
-            NewTextBox("Phone");
-            NewTextBox("Email");
+            NewTextBox("LName", values[1]);
+            NewTextBox("FName", values[2]);
+            NewTextBox("MName", values[3]);
+            NewDropDownList("Sex", new string[] { "Мужской", "Женский" }, values[4]);
+            NewCalendar("Birthday", values[5]);
+            NewTextBox("Phone", values[6]);
+            NewTextBox("Email", values[7]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddEventElems()
         {
-            NewCalendar("Date");
-            NewTextBox("Desc");
-            NewCheckBoxList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"));
+            string[] hArr = new string[24];
+            string[] mArr = new string[60];
+            for (int h = 0; h < 24; h++)
+            {
+                if (h < 10)
+                {
+                    hArr[h] = "0" + h.ToString();
+                }
+                else
+                {
+                    hArr[h] = h.ToString();
+                }
+            }
+            for (int m = 0; m < 60; m++)
+            {
+                if (m < 10)
+                {
+                    mArr[m] = "0" + m.ToString();
+                }
+                else
+                {
+                    mArr[m] = m.ToString();
+                }
+            }
+            if (values[0] != null)
+            {
+                DateTime date = (DateTime)values[1];
+                NewCalendar("Date", date.Date);
+                NewDropDownList("Hours", hArr, date.Hour);
+                NewDropDownList("Minutes", mArr, date.Minute);
+            }
+            else
+            {
+                NewCalendar("Date", null);
+                NewDropDownList("Hours", hArr, null);
+                NewDropDownList("Minutes", mArr, null);
+            }
+            NewTextBox("Desc", values[2]);
+            NewCheckBoxList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[3]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void RedirectBack(object sender, EventArgs e)
         {
-            values = null;
+            values = new object[10];
             switch (tableId)
             {
                 case 0:
@@ -141,9 +185,10 @@ namespace coursedb
 
         protected void Apply(object sender, EventArgs e)
         {
+            bool isHours = true;
             List<int> memberIdLst = new List<int>();
             List<object> lst = new List<object>();
-            if (values != null)
+            if (values[0] != null)
             {
                 lst.Add(values[0]);
             }
@@ -176,7 +221,6 @@ namespace coursedb
                 }
                 else if (ctrl is DropDownList)
                 {
-                    DebugLabel.Text += (ctrl as DropDownList).SelectedValue;
                     switch ((ctrl as DropDownList).SelectedValue)
                     {
                         case "Мужской":
@@ -191,19 +235,41 @@ namespace coursedb
                             }
                         default:
                             {
-                                if (tableId == 4)
+                                if (tableId != 1)
                                 {
-                                    lst.Add((ctrl as DropDownList).SelectedValue);
+                                    if (tableId == 4)
+                                    {
+                                        lst.Add((ctrl as DropDownList).SelectedValue);
+                                    }
+                                    else
+                                    {
+                                        lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
+                                    }
                                 }
                                 else
                                 {
-                                    lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
+                                    if (isHours)
+                                    {
+                                        DateTime date = (DateTime)lst[1];
+                                        date = date.AddHours(Double.Parse((ctrl as DropDownList).SelectedValue));
+                                        lst[1] = date;
+                                        isHours = false;
+                                    }
+                                    else
+                                    {
+                                        DateTime date = (DateTime)lst[1];
+                                        date = date.AddMinutes(Double.Parse((ctrl as DropDownList).SelectedValue));
+                                        lst[1] = date;
+                                        DebugLabel.Text = lst[1].ToString();
+                                        isHours = true;
+                                    }
                                 }
                                 break;
                             }
                     }
                 }
             }
+
             try
             {
                 switch (tableId)
@@ -218,14 +284,18 @@ namespace coursedb
                             Util.InsertOrUpdateEvent(lst.ToArray());
                             foreach (int memberId in memberIdLst)
                             {
-                                if (values is null)
+                                if (values[0] is null)
                                 {
                                     Util.LinkEventToMember(memberId, Util.GetLastID("Событие", "Идентификатор_События"));
                                 }
                                 else
                                 {
-                                    Util.LinkEventToMember(memberId, Int32.Parse((string)values[0]));
+                                    Util.LinkEventToMember(memberId, (int)values[0]);
                                 }
+                            }
+                            if (memberIdLst.Count == 0)
+                            {
+                                Util.DeleteLink((int)values[0]);
                             }
                             break;
                         }
@@ -252,37 +322,92 @@ namespace coursedb
             }
         }
 
-        private void NewCheckBoxList(string id, string[] items)
+        private void NewCheckBoxList(string id, string[] items, object value)
         {
+            string[] selectedStrArr = value as string[];
             CheckBoxList cbl = new CheckBoxList() { ID = id };
             foreach (string item in items)
             {
                 cbl.Items.Add(item);
             }
+            foreach (ListItem item in cbl.Items)
+            {
+                if (selectedStrArr != null)
+                {
+                    foreach (string str in selectedStrArr)
+                    {
+                        if (item.Text.SubstringUpToFirst(' ').Contains(str))
+                        {
+                            item.Selected = true;
+                            break;
+                        }
+                    }
+                }
+            }
             EditPanel.Controls.Add(cbl);
         }
 
-        private void NewTextBox(string id)
+        private void NewTextBox(string id, object value)
         {
+            string textStr = value as string;
             TextBox tb = new TextBox() { ID = id };
+            if (textStr != null)
+            {
+                tb.Text = textStr;
+            }
             EditPanel.Controls.Add(tb);
         }
 
-        private void NewDropDownList(string id, string[] items)
+        private void NewDropDownList(string id, string[] items, object value)
         {
-            DropDownList lb = new DropDownList() { ID = id };
+            DropDownList ddl = new DropDownList() { ID = id };
             foreach (string item in items)
             {
-                lb.Items.Add(item);
+                ddl.Items.Add(item);
             }
-            EditPanel.Controls.Add(lb);
+            if (value != null)
+            {
+                switch (value)
+                {
+                    case true:
+                        {
+                            ddl.SelectedValue = "Женский";
+                            break;
+                        }
+                    case false:
+                        {
+                            ddl.SelectedValue = "Мужской";
+                            break;
+                        }
+                    default:
+                        {
+                            foreach (ListItem item in ddl.Items)
+                            {
+                                if (item.Text.Contains(value.ToString()))
+                                {
+                                    item.Selected = true;
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                }
+            }
+            EditPanel.Controls.Add(ddl);
         }
 
-        private void NewCalendar(string id)
+        private void NewCalendar(string id, object value)
         {
             Calendar cld = new Calendar() { ID = id };
             cld.SelectionMode = CalendarSelectionMode.Day;
-            cld.SelectedDate = DateTime.Today;
+            if (value is null)
+            {
+                cld.SelectedDate = DateTime.Today;
+            }
+            else
+            {
+                cld.SelectedDate = (DateTime)value;
+            }
             EditPanel.Controls.Add(cld);
         }
 

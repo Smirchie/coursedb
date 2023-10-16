@@ -9,7 +9,7 @@
                 <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
                 <Columns>
                     <asp:BoundField DataField="Идентификатор_События" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="Идентификатор_События" />
-                    <asp:BoundField DataField="Дата_Проведения" HeaderText="Время" SortExpression="Дата_Проведения" />
+                    <asp:BoundField DataField="Дата_Проведения" HeaderText="Время" SortExpression="Дата_Проведения" DataFormatString="{0:g}" />
                     <asp:BoundField DataField="Описание" HeaderText="Описание" SortExpression="Описание" />
                     <asp:ButtonField CommandName="ShowMembers" Text="Участники" />
                     <asp:ButtonField ButtonType="Button" CommandName="EditRow" Text="Изменить" />

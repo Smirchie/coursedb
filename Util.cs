@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 using System.Security.Cryptography;
 using System.Data;
 using Microsoft.Ajax.Utilities;
+using System.Data.Common;
 
 namespace coursedb
 {
@@ -44,6 +45,26 @@ namespace coursedb
             while (rdr.Read())
             {
                 values.Add(ReadSingleRow((IDataRecord)rdr));
+            }
+            con.Close();
+            return values.ToArray();
+        }
+
+        public static object[] GetValuesFromRow(string tableName, string columnNames)
+        {
+            List<object> values = new List<object>();
+            SqlCommand cmd = new SqlCommand($"SELECT {columnNames} FROM {tableName}", con);
+            if (con.State == System.Data.ConnectionState.Closed)
+            {
+                con.Open();
+            }
+            SqlDataReader rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                for (int i = 0; i < (rdr as IDataRecord).FieldCount; i++)
+                {
+                    values.Add((rdr as IDataRecord).GetValue(i));
+                }
             }
             con.Close();
             return values.ToArray();
@@ -98,6 +119,14 @@ namespace coursedb
             cmd.Parameters.AddWithValue("@Site", values[3]);
             cmd.Parameters.AddWithValue("@Phone", values[4]);
             cmd.Parameters.AddWithValue("@MemberId", values[5]);
+            Exec(cmd);
+        }
+
+        public static void DeleteLink(int eventId)
+        {
+            SqlCommand cmd = new SqlCommand("DeleteLink", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@EventId", eventId);
             Exec(cmd);
         }
 
