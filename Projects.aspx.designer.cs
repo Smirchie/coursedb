@@ -15,6 +15,15 @@ namespace coursedb
     {
 
         /// <summary>
+        /// InsertButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button InsertButton;
+
+        /// <summary>
         /// EventPanel control.
         /// </summary>
         /// <remarks>
@@ -31,15 +40,6 @@ namespace coursedb
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView ProjectGridView;
-
-        /// <summary>
-        /// InsertButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button InsertButton;
 
         /// <summary>
         /// ProjectsDataSource control.

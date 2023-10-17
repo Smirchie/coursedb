@@ -46,6 +46,7 @@ namespace coursedb
             {
                 values.Add(ReadSingleRow((IDataRecord)rdr));
             }
+            rdr.Close();
             con.Close();
             return values.ToArray();
         }
@@ -66,6 +67,7 @@ namespace coursedb
                     values.Add((rdr as IDataRecord).GetValue(i));
                 }
             }
+            rdr.Close();
             con.Close();
             return values.ToArray();
         }

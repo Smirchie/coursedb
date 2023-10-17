@@ -4,10 +4,11 @@
     
     <main>
         <asp:Panel id ="MemberPanel"
-                   runat ="server" />
+                   runat ="server" HorizontalAlign="Left"/>
+        <asp:Button ID="InsertButton" Text ="Добавить" runat="server" OnClick ="InsertMember" />
         <asp:GridView id="MemberGridView"
-                      runat ="server" OnRowCommand="MemberRowCommand" AutoGenerateColumns="False" DataKeyNames="Идентификатор_Члена_Партии" DataSourceID="MemberDataSource" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" AllowSorting="True" CellSpacing="2" Font-Names="Arial" HorizontalAlign="Center" ShowHeaderWhenEmpty="True">
-            <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                      runat ="server" OnRowCommand="MemberRowCommand" AutoGenerateColumns="False" DataKeyNames="Идентификатор_Члена_Партии" DataSourceID="MemberDataSource" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" AllowSorting="True" CellSpacing="2" Font-Names="Arial" HorizontalAlign="Left" ShowHeaderWhenEmpty="True" Width="1000px">
+            <AlternatingRowStyle BackColor="White" ForeColor="#284775" Wrap="True" />
             <Columns>
                 <asp:BoundField DataField="Идентификатор_Члена_Партии" HeaderText="ID" ReadOnly="True" SortExpression="Идентификатор_Члена_Партии" />
                 <asp:BoundField DataField="Фамилия" HeaderText="Фамилия" SortExpression="Фамилия" />
@@ -31,10 +32,10 @@
             <SortedAscendingHeaderStyle BackColor="#506C8C" />
             <SortedDescendingCellStyle BackColor="#FFFDF8" />
             <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
+
 </asp:GridView>
+        
         <asp:ListBox ID="EventList" runat="server"></asp:ListBox>
-        <asp:Button ID="InsertButton" Text ="Добавить" runat="server" OnClick ="InsertMember"/>
-    <asp:Label ID="DebugLabel" runat="server" Text="Debug"></asp:Label>
 <asp:SqlDataSource ID="MemberDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:Pol_Party_courseConnectionString %>" SelectCommand="SELECT [Идентификатор_Члена_Партии], [Фамилия], [Имя], [Отчество], [Пол], [Дата_Рождения], [Телефон], [Электронная_Почта] FROM [Член_Партии] ORDER BY [Идентификатор_Члена_Партии]"></asp:SqlDataSource>
     </main>
 </asp:Content>

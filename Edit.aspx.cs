@@ -12,7 +12,7 @@ using System.Web.UI.WebControls;
 
 namespace coursedb
 {
-    public partial class InsertOrEditForm : System.Web.UI.Page
+    public partial class Edit : System.Web.UI.Page
     {
         public static int tableId = -1;
         public static object[] values = new object[10];
@@ -52,14 +52,15 @@ namespace coursedb
 
         private void AddAppealElems()
         {
-            NewDropDownList("DeptId", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"), values[1]);
-            NewTextBox("LName", values[2]);
-            NewTextBox("FName", values[3]);
-            NewTextBox("MName", values[4]);
-            NewDropDownList("Sex", new string[] { "Мужской", "Женский" }, values[5]);
-            NewTextBox("Phone", values[6]);
+            NewDropDownList("ID Отделеня", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"), values[1]);
+            NewLabel("Данные отправителя");
+            NewTextBox("Фамилия", values[2]);
+            NewTextBox("Имя", values[3]);
+            NewTextBox("Отчество", values[4]);
+            NewDropDownList("Пол", new string[] { "Мужской", "Женский" }, values[5]);
+            NewTextBox("Телефон", values[6]);
             NewTextBox("E-mail", values[7]);
-            NewTextBox("AppealText", values[8]);
+            NewTextBox("Текст обращения", values[8]);
             NewApplyButton();
             NewCancelButton();
         }
@@ -68,39 +69,39 @@ namespace coursedb
         {
             if (values[1] != null)
             {
-                NewTextBox("RegionId", values[1].ToString());
+                NewTextBox("Номер региона", values[1].ToString());
             }
             else
             {
-                NewTextBox("RegionId", null);
+                NewTextBox("Номер региона", null);
             }
-            NewTextBox("Address", values[2]);
-            NewTextBox("Site", values[3]);
-            NewTextBox("Phone", values[4]);
-            NewDropDownList("Head", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[5]);
+            NewTextBox("Адрес", values[2]);
+            NewTextBox("Сайт", values[3]);
+            NewTextBox("Телефон", values[4]);
+            NewDropDownList("Руководитель", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[5]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddProjectElems()
         {
-            NewTextBox("Name", values[1]);
-            NewTextBox("Desc", values[2]);
-            NewTextBox("Finance", values[3]);
-            NewDropDownList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
+            NewTextBox("Название", values[1]);
+            NewTextBox("Описание", values[2]);
+            NewTextBox("Финансирование", values[3]);
+            NewDropDownList("Руководитель", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void AddMemberElems()
         {
-            NewTextBox("LName", values[1]);
-            NewTextBox("FName", values[2]);
-            NewTextBox("MName", values[3]);
-            NewDropDownList("Sex", new string[] { "Мужской", "Женский" }, values[4]);
-            NewCalendar("Birthday", values[5]);
-            NewTextBox("Phone", values[6]);
-            NewTextBox("Email", values[7]);
+            NewTextBox("Фамилия", values[1]);
+            NewTextBox("Имя", values[2]);
+            NewTextBox("Отчество", values[3]);
+            NewDropDownList("Пол", new string[] { "Мужской", "Женский" }, values[4]);
+            NewCalendar("Дата рождения", values[5]);
+            NewTextBox("Телефон", values[6]);
+            NewTextBox("E-mail", values[7]);
             NewApplyButton();
             NewCancelButton();
         }
@@ -131,27 +132,28 @@ namespace coursedb
                     mArr[m] = m.ToString();
                 }
             }
-            if (values[0] != null)
+            try
             {
                 DateTime date = (DateTime)values[1];
-                NewCalendar("Date", date.Date);
-                NewDropDownList("Hours", hArr, date.Hour);
-                NewDropDownList("Minutes", mArr, date.Minute);
+                NewCalendar("Дата проведения", date.Date);
+                NewDropDownList("Время проведения", hArr, date.Hour);
+                NewDropDownList(":", mArr, date.Minute);
             }
-            else
+            catch
             {
-                NewCalendar("Date", null);
-                NewDropDownList("Hours", hArr, null);
-                NewDropDownList("Minutes", mArr, null);
+                NewCalendar("Дата проведения", null);
+                NewDropDownList("Время проведения", hArr, null);
+                NewDropDownList(":", mArr, null);
             }
-            NewTextBox("Desc", values[2]);
-            NewCheckBoxList("Members", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[3]);
+            NewTextBox("Описание", values[2]);
+            NewCheckBoxList("Участники", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[3]);
             NewApplyButton();
             NewCancelButton();
         }
 
         private void RedirectBack(object sender, EventArgs e)
         {
+            ErrorLabel.Text = null;
             values = new object[10];
             switch (tableId)
             {
@@ -185,93 +187,96 @@ namespace coursedb
 
         protected void Apply(object sender, EventArgs e)
         {
-            bool isHours = true;
-            List<int> memberIdLst = new List<int>();
-            List<object> lst = new List<object>();
-            if (values[0] != null)
+            try
             {
-                lst.Add(values[0]);
-            }
-            else
-            {
-                lst.Add(-1);
-            }
-            foreach (Control ctrl in EditPanel.Controls)
-            {
-                if (ctrl is TextBox)
+                bool isHours = true;
+                List<int> memberIdLst = new List<int>();
+                List<object> lst = new List<object>();
+                if (values[0] != null)
                 {
-                    lst.Add((ctrl as TextBox).Text);
-                    DebugLabel.Text += (ctrl as TextBox).Text;
+                    lst.Add(values[0]);
                 }
-                else if (ctrl is Calendar)
+                else
                 {
-                    lst.Add((ctrl as Calendar).SelectedDate);
-                    DebugLabel.Text += (ctrl as Calendar).SelectedDate.ToShortDateString();
+                    lst.Add(-1);
                 }
-                else if (ctrl is CheckBoxList)
+                foreach (Control ctrl in EditPanel.Controls)
                 {
-                    foreach (ListItem item in (ctrl as CheckBoxList).Items)
+                    if (ctrl is TextBox)
                     {
-                        if (item.Selected)
+                        if ((ctrl as TextBox).Text.Trim() == "")
                         {
-                            memberIdLst.Add(Util.GetIDFromString(item.Text));
-                            DebugLabel.Text += (Util.GetIDFromString(item.Text));
+                            lst.Add(null);
+                        }
+                        else
+                        {
+                            lst.Add((ctrl as TextBox).Text);
+                        }
+                    }
+                    else if (ctrl is Calendar)
+                    {
+                        lst.Add((ctrl as Calendar).SelectedDate);
+                    }
+                    else if (ctrl is CheckBoxList)
+                    {
+                        foreach (ListItem item in (ctrl as CheckBoxList).Items)
+                        {
+                            if (item.Selected)
+                            {
+                                memberIdLst.Add(Util.GetIDFromString(item.Text));
+                            }
+                        }
+                    }
+                    else if (ctrl is DropDownList)
+                    {
+                        switch ((ctrl as DropDownList).SelectedValue)
+                        {
+                            case "Мужской":
+                                {
+                                    lst.Add(false);
+                                    break;
+                                }
+                            case "Женский":
+                                {
+                                    lst.Add(true);
+                                    break;
+                                }
+                            default:
+                                {
+                                    if (tableId != 1)
+                                    {
+                                        if (tableId == 4)
+                                        {
+                                            lst.Add((ctrl as DropDownList).SelectedValue);
+                                        }
+                                        else
+                                        {
+                                            lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (isHours)
+                                        {
+                                            DateTime date = (DateTime)lst[1];
+                                            date = date.AddHours(Double.Parse((ctrl as DropDownList).SelectedValue));
+                                            lst[1] = date;
+                                            isHours = false;
+                                        }
+                                        else
+                                        {
+                                            DateTime date = (DateTime)lst[1];
+                                            date = date.AddMinutes(Double.Parse((ctrl as DropDownList).SelectedValue));
+                                            lst[1] = date;
+                                            isHours = true;
+                                        }
+                                    }
+                                    break;
+                                }
                         }
                     }
                 }
-                else if (ctrl is DropDownList)
-                {
-                    switch ((ctrl as DropDownList).SelectedValue)
-                    {
-                        case "Мужской":
-                            {
-                                lst.Add(false);
-                                break;
-                            }
-                        case "Женский":
-                            {
-                                lst.Add(true);
-                                break;
-                            }
-                        default:
-                            {
-                                if (tableId != 1)
-                                {
-                                    if (tableId == 4)
-                                    {
-                                        lst.Add((ctrl as DropDownList).SelectedValue);
-                                    }
-                                    else
-                                    {
-                                        lst.Add(Util.GetIDFromString((ctrl as DropDownList).SelectedValue));
-                                    }
-                                }
-                                else
-                                {
-                                    if (isHours)
-                                    {
-                                        DateTime date = (DateTime)lst[1];
-                                        date = date.AddHours(Double.Parse((ctrl as DropDownList).SelectedValue));
-                                        lst[1] = date;
-                                        isHours = false;
-                                    }
-                                    else
-                                    {
-                                        DateTime date = (DateTime)lst[1];
-                                        date = date.AddMinutes(Double.Parse((ctrl as DropDownList).SelectedValue));
-                                        lst[1] = date;
-                                        DebugLabel.Text = lst[1].ToString();
-                                        isHours = true;
-                                    }
-                                }
-                                break;
-                            }
-                    }
-                }
-            }
 
-            try
-            {
                 switch (tableId)
                 {
                     case 0:
@@ -319,11 +324,13 @@ namespace coursedb
             }
             catch
             {
+                ErrorLabel.Text = "Проверьте корректность введенных данных";
             }
         }
 
         private void NewCheckBoxList(string id, string[] items, object value)
         {
+            NewLabel(id);
             string[] selectedStrArr = value as string[];
             CheckBoxList cbl = new CheckBoxList() { ID = id };
             foreach (string item in items)
@@ -345,10 +352,12 @@ namespace coursedb
                 }
             }
             EditPanel.Controls.Add(cbl);
+            BrLabel();
         }
 
         private void NewTextBox(string id, object value)
         {
+            NewLabel(id);
             string textStr = value as string;
             TextBox tb = new TextBox() { ID = id };
             if (textStr != null)
@@ -356,10 +365,12 @@ namespace coursedb
                 tb.Text = textStr;
             }
             EditPanel.Controls.Add(tb);
+            BrLabel();
         }
 
         private void NewDropDownList(string id, string[] items, object value)
         {
+            NewLabel(id);
             DropDownList ddl = new DropDownList() { ID = id };
             foreach (string item in items)
             {
@@ -394,10 +405,25 @@ namespace coursedb
                 }
             }
             EditPanel.Controls.Add(ddl);
+            if (id != "Время проведения")
+            {
+                BrLabel();
+            }
+        }
+
+        private void NewLabel(string text)
+        {
+            Label lbl = new Label() { Text = text };
+            EditPanel.Controls.Add(lbl);
+            if (text != ":")
+            {
+                BrLabel();
+            }
         }
 
         private void NewCalendar(string id, object value)
         {
+            NewLabel(id);
             Calendar cld = new Calendar() { ID = id };
             cld.SelectionMode = CalendarSelectionMode.Day;
             if (value is null)
@@ -409,6 +435,7 @@ namespace coursedb
                 cld.SelectedDate = (DateTime)value;
             }
             EditPanel.Controls.Add(cld);
+            BrLabel();
         }
 
         private void NewApplyButton()
@@ -423,6 +450,12 @@ namespace coursedb
             Button btn = new Button() { ID = "CancelBtn", Text = "Отменить" };
             btn.Command += RedirectBack;
             EditPanel.Controls.Add(btn);
+        }
+
+        private void BrLabel()
+        {
+            Label lbl = new Label() { Text = "</br>" };
+            EditPanel.Controls.Add(lbl);
         }
     }
 }

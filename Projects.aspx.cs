@@ -36,20 +36,20 @@ namespace coursedb
             }
             else if (e.CommandName == "EditRow")
             {
-                InsertOrEditForm.tableId = 2;
+                Edit.tableId = 2;
                 object[] values = Util.GetValuesFromRow($"Проект WHERE Идентификатор_Проекта = {Util.GetIdFromGridView(e, ProjectGridView)}", "*");
                 for (int i = 0; i < 5; i++)
                 {
-                    InsertOrEditForm.values[i] = values[i];
+                    Edit.values[i] = values[i];
                 }
-                Response.Redirect("~/InsertOrEditForm.aspx");
+                Response.Redirect("~/Edit.aspx");
             }
         }
 
         protected void InsertProject(object sender, EventArgs e)
         {
-            InsertOrEditForm.tableId = 2;
-            Response.Redirect("~/InsertOrEditForm.aspx");
+            Edit.tableId = 2;
+            Response.Redirect("~/Edit.aspx");
         }
     }
 }

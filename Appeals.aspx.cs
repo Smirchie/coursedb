@@ -11,6 +11,26 @@ namespace coursedb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            try
+            {
+                foreach (GridViewRow row in AppealGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[5].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "М";
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
 
         protected void AppealRowCommand(object sender, GridViewCommandEventArgs e)
@@ -19,16 +39,30 @@ namespace coursedb
             {
                 Util.DeleteFromTable(Util.GetIdFromGridView(e, AppealGridView), "Appeal");
                 AppealGridView.DataBind();
+                foreach (GridViewRow row in AppealGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[5].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "М";
+                    }
+                }
             }
             else if (e.CommandName == "EditRow")
             {
-                InsertOrEditForm.tableId = 4;
+                Edit.tableId = 4;
                 object[] values = Util.GetValuesFromRow($"Обращение WHERE Идентификатор_Обращения = {Util.GetIdFromGridView(e, AppealGridView)}", "*");
                 for (int i = 0; i < 9; i++)
                 {
-                    InsertOrEditForm.values[i] = values[i];
+                    Edit.values[i] = values[i];
                 }
-                Response.Redirect("~/InsertOrEditForm.aspx");
+                Response.Redirect("~/Edit.aspx");
             }
             else if (e.CommandName == "ViewText")
             {
@@ -39,8 +73,8 @@ namespace coursedb
 
         protected void InsertDept(object sender, EventArgs e)
         {
-            InsertOrEditForm.tableId = 4;
-            Response.Redirect("~/InsertOrEditForm.aspx");
+            Edit.tableId = 4;
+            Response.Redirect("~/Edit.aspx");
         }
     }
 }

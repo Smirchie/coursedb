@@ -3,9 +3,10 @@
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <main>
-    </main>
+        
+    <asp:Button ID="InsertButton" runat="server" OnClick="InsertDept" Text="Добавить" />
 
-    <asp:GridView ID="AppealGridView" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="Идентификатор_Обращения" DataSourceID="AppealDataSource" ForeColor="#333333" GridLines="None" OnRowCommand="AppealRowCommand" ShowHeaderWhenEmpty="True">
+    <asp:GridView ID="AppealGridView" runat="server" Width="1000px" HorizontalAlign ="Left" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="Идентификатор_Обращения" DataSourceID="AppealDataSource" ForeColor="#333333" GridLines="None" OnRowCommand="AppealRowCommand" ShowHeaderWhenEmpty="True">
         <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
         <Columns>
             <asp:BoundField DataField="Идентификатор_Обращения" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="Идентификатор_Обращения" />
@@ -31,9 +32,9 @@
         <SortedDescendingCellStyle BackColor="#FFFDF8" />
         <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
     </asp:GridView>
-    <asp:SqlDataSource ID="tegaega" runat="server"></asp:SqlDataSource>
-    <asp:Button ID="InsertButton" runat="server" OnClick="InsertDept" Text="Добавить" />
-    <asp:TextBox TextMode="MultiLine" runat ="server" id="AppealTextBox"></asp:TextBox>
+        </main>
     <asp:SqlDataSource ID="AppealDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:Pol_Party_courseConnectionString %>" SelectCommand="SELECT * FROM [Обращение] ORDER BY [Идентификатор_Обращения]"></asp:SqlDataSource>
 
+    <asp:TextBox TextMode="MultiLine" runat ="server" id="AppealTextBox" Width="500px" ReadOnly="true"></asp:TextBox>
+        
 </asp:Content>

@@ -133,7 +133,7 @@
     <Content Include="Events.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="InsertOrEditForm.aspx" />
+    <Content Include="Edit.aspx" />
     <Content Include="Members.aspx" />
     <Content Include="polModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -250,12 +250,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="InsertOrEditForm.aspx.cs">
-      <DependentUpon>InsertOrEditForm.aspx</DependentUpon>
+    <Compile Include="Edit.aspx.cs">
+      <DependentUpon>Edit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="InsertOrEditForm.aspx.designer.cs">
-      <DependentUpon>InsertOrEditForm.aspx</DependentUpon>
+    <Compile Include="Edit.aspx.designer.cs">
+      <DependentUpon>Edit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Members.aspx.cs">
       <DependentUpon>Members.aspx</DependentUpon>

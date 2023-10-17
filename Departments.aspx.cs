@@ -22,20 +22,20 @@ namespace coursedb
             }
             else if (e.CommandName == "EditRow")
             {
-                InsertOrEditForm.tableId = 3;
+                Edit.tableId = 3;
                 object[] values = Util.GetValuesFromRow($"Отделение WHERE Идентификатор_Отделения = {Util.GetIdFromGridView(e, DeptGridView)}", "*");
                 for (int i = 0; i < 6; i++)
                 {
-                    InsertOrEditForm.values[i] = values[i];
+                    Edit.values[i] = values[i];
                 }
-                Response.Redirect("~/InsertOrEditForm.aspx");
+                Response.Redirect("~/Edit.aspx");
             }
         }
 
         protected void InsertDept(object sender, EventArgs e)
         {
-            InsertOrEditForm.tableId = 3;
-            Response.Redirect("~/InsertOrEditForm.aspx");
+            Edit.tableId = 3;
+            Response.Redirect("~/Edit.aspx");
         }
     }
 }

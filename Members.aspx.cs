@@ -15,6 +15,14 @@ namespace coursedb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (EventList.Items.Count < 1)
+            {
+                EventList.Visible = false;
+            }
+            else
+            {
+                EventList.Visible = true;
+            }
             try
             {
                 foreach (GridViewRow row in MemberGridView.Rows)
@@ -57,16 +65,17 @@ namespace coursedb
                         row.Cells[4].Text = "М";
                     }
                 }
+                EventList.Visible = false;
             }
             else if (e.CommandName == "EditRow")
             {
-                InsertOrEditForm.tableId = 0;
+                Edit.tableId = 0;
                 object[] values = Util.GetValuesFromRow($"Член_Партии WHERE Идентификатор_Члена_Партии = {Util.GetIdFromGridView(e, MemberGridView)}", "*");
                 for (int i = 0; i < 8; i++)
                 {
-                    InsertOrEditForm.values[i] = values[i];
+                    Edit.values[i] = values[i];
                 }
-                Response.Redirect("~/InsertOrEditForm.aspx");
+                Response.Redirect("~/Edit.aspx");
             }
             else if (e.CommandName == "ShowEvents")
             {
@@ -76,13 +85,21 @@ namespace coursedb
                 {
                     EventList.Items.Add(Util.GetValuesFromTable($"Событие WHERE Идентификатор_События = {eventId}", "Идентификатор_События, Дата_Проведения")[0]);
                 }
+                if (EventList.Items.Count < 1)
+                {
+                    EventList.Visible = false;
+                }
+                else
+                {
+                    EventList.Visible = true;
+                }
             }
         }
 
         protected void InsertMember(object sender, EventArgs e)
         {
-            InsertOrEditForm.tableId = 0;
-            Response.Redirect("~/InsertOrEditForm.aspx");
+            Edit.tableId = 0;
+            Response.Redirect("~/Edit.aspx");
         }
     }
 }
