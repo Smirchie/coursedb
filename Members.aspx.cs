@@ -15,34 +15,7 @@ namespace coursedb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (EventList.Items.Count < 1)
-            {
-                EventList.Visible = false;
-            }
-            else
-            {
-                EventList.Visible = true;
-            }
-            try
-            {
-                foreach (GridViewRow row in MemberGridView.Rows)
-                {
-                    CheckBox cb = row.Cells[4].Controls[0] as CheckBox;
-                    if (cb.Checked)
-                    {
-                        row.Cells[4].Controls.Clear();
-                        row.Cells[4].Text = "Ж";
-                    }
-                    else
-                    {
-                        row.Cells[4].Controls.Clear();
-                        row.Cells[4].Text = "М";
-                    }
-                }
-            }
-            catch
-            {
-            }
+            ProperDisplay();
         }
 
         protected void MemberRowCommand(object sender, GridViewCommandEventArgs e)
@@ -51,20 +24,6 @@ namespace coursedb
             {
                 Util.DeleteFromTable(Util.GetIdFromGridView(e, MemberGridView), "Member");
                 MemberGridView.DataBind();
-                foreach (GridViewRow row in MemberGridView.Rows)
-                {
-                    CheckBox cb = row.Cells[4].Controls[0] as CheckBox;
-                    if (cb.Checked)
-                    {
-                        row.Cells[4].Controls.Clear();
-                        row.Cells[4].Text = "Ж";
-                    }
-                    else
-                    {
-                        row.Cells[4].Controls.Clear();
-                        row.Cells[4].Text = "М";
-                    }
-                }
                 EventList.Visible = false;
             }
             else if (e.CommandName == "EditRow")
@@ -98,8 +57,38 @@ namespace coursedb
 
         protected void InsertMember(object sender, EventArgs e)
         {
+            Edit.values = new object[10];
             Edit.tableId = 0;
             Response.Redirect("~/Edit.aspx");
+        }
+
+        protected void ProperDisplay()
+        {
+            try
+            {
+                foreach (GridViewRow row in MemberGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[4].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[4].Controls.Clear();
+                        row.Cells[4].Text = "М";
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        protected void MemberGridView_DataBound(object sender, EventArgs e)
+        {
+            ProperDisplay();
         }
     }
 }

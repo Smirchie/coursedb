@@ -24,27 +24,28 @@ namespace coursedb
 
         protected void InsertEvent(object sender, EventArgs e)
         {
+            Edit.values = new object[10];
             Edit.tableId = 1;
             Response.Redirect("~/Edit.aspx");
         }
 
         protected void EventRowCommand(object sender, GridViewCommandEventArgs e)
         {
+            MemberList.Visible = false;
             if (e.CommandName == "DeleteRow")
             {
                 Util.DeleteFromTable(Util.GetIdFromGridView(e, EventGridView), "Event");
                 EventGridView.DataBind();
-                MemberList.Visible = false;
             }
             else if (e.CommandName == "EditRow")
             {
                 Edit.tableId = 1;
                 object[] values = Util.GetValuesFromRow($"Событие WHERE Идентификатор_События = {Util.GetIdFromGridView(e, EventGridView)}", "*");
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     Edit.values[i] = values[i];
                 }
-                Edit.values[3] = Util.GetValuesFromTable($"[Связь Член_Партии Событие] WHERE Идентификатор_События = {Util.GetIdFromGridView(e, EventGridView)}", "Идентификатор_Члена_Партии");
+                Edit.values[4] = Util.GetValuesFromTable($"[Связь Член_Партии Событие] WHERE Идентификатор_События = {Util.GetIdFromGridView(e, EventGridView)}", "Идентификатор_Члена_Партии");
                 Response.Redirect("~/Edit.aspx");
             }
             else if (e.CommandName == "ShowMembers")
@@ -64,6 +65,11 @@ namespace coursedb
                     MemberList.Visible = true;
                 }
             }
+        }
+
+        protected void EventGridView_DataBound(object sender, EventArgs e)
+        {
+            MemberList.Visible = false;
         }
     }
 }

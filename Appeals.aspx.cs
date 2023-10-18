@@ -35,10 +35,8 @@ namespace coursedb
 
         protected void AppealRowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "DeleteRow")
+            try
             {
-                Util.DeleteFromTable(Util.GetIdFromGridView(e, AppealGridView), "Appeal");
-                AppealGridView.DataBind();
                 foreach (GridViewRow row in AppealGridView.Rows)
                 {
                     CheckBox cb = row.Cells[5].Controls[0] as CheckBox;
@@ -53,6 +51,14 @@ namespace coursedb
                         row.Cells[5].Text = "М";
                     }
                 }
+            }
+            catch
+            {
+            }
+            if (e.CommandName == "DeleteRow")
+            {
+                Util.DeleteFromTable(Util.GetIdFromGridView(e, AppealGridView), "Appeal");
+                AppealGridView.DataBind();
             }
             else if (e.CommandName == "EditRow")
             {
@@ -73,8 +79,33 @@ namespace coursedb
 
         protected void InsertDept(object sender, EventArgs e)
         {
+            Edit.values = new object[10];
             Edit.tableId = 4;
             Response.Redirect("~/Edit.aspx");
+        }
+
+        protected void AppealGridView_DataBound(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (GridViewRow row in AppealGridView.Rows)
+                {
+                    CheckBox cb = row.Cells[5].Controls[0] as CheckBox;
+                    if (cb.Checked)
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "Ж";
+                    }
+                    else
+                    {
+                        row.Cells[5].Controls.Clear();
+                        row.Cells[5].Text = "М";
+                    }
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

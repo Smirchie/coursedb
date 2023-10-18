@@ -7,10 +7,10 @@
                    runat ="server" HorizontalAlign="Left"/>
         <asp:Button ID="InsertButton" Text ="Добавить" runat="server" OnClick ="InsertMember" />
         <asp:GridView id="MemberGridView"
-                      runat ="server" OnRowCommand="MemberRowCommand" AutoGenerateColumns="False" DataKeyNames="Идентификатор_Члена_Партии" DataSourceID="MemberDataSource" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" AllowSorting="True" CellSpacing="2" Font-Names="Arial" HorizontalAlign="Left" ShowHeaderWhenEmpty="True" Width="1000px">
+                      runat ="server" OnRowCommand="MemberRowCommand" AutoGenerateColumns="False" DataKeyNames="Идентификатор_Члена_Партии" DataSourceID="MemberDataSource" CellPadding="4" ForeColor="#333333" GridLines="None" AllowPaging="True" AllowSorting="True" CellSpacing="2" Font-Names="Arial" HorizontalAlign="Left" ShowHeaderWhenEmpty="True" Width="1000px" OnDataBound="MemberGridView_DataBound">
             <AlternatingRowStyle BackColor="White" ForeColor="#284775" Wrap="True" />
             <Columns>
-                <asp:BoundField DataField="Идентификатор_Члена_Партии" HeaderText="ID" ReadOnly="True" SortExpression="Идентификатор_Члена_Партии" />
+                <asp:BoundField DataField="Идентификатор_Члена_Партии" HeaderText="Идентификатор" ReadOnly="True" SortExpression="Идентификатор_Члена_Партии" />
                 <asp:BoundField DataField="Фамилия" HeaderText="Фамилия" SortExpression="Фамилия" />
                 <asp:BoundField DataField="Имя" HeaderText="Имя" SortExpression="Имя" />
                 <asp:BoundField DataField="Отчество" HeaderText="Отчество" SortExpression="Отчество" />

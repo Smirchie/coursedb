@@ -5,13 +5,13 @@
     <main>
     <asp:Button ID="InsertButton" Text ="Добавить" runat="server" OnClick ="InsertProject"/>
         <asp:Panel ID ="EventPanel" runat ="server">
-    <asp:GridView ID="ProjectGridView" OnRowCommand="ProjectRowCommand" Width ="1000px" runat="server" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="Идентификатор_Проекта" DataSourceID="ProjectsDataSource" ForeColor="#333333" GridLines="None"  ShowHeaderWhenEmpty ="True" AllowPaging="True" AllowSorting="True">
+    <asp:GridView ID="ProjectGridView" OnRowCommand="ProjectRowCommand" Width ="1200px" runat="server" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="Идентификатор_Проекта" DataSourceID="ProjectsDataSource" ForeColor="#333333" GridLines="None"  ShowHeaderWhenEmpty ="True" AllowPaging="True" AllowSorting="True" OnDataBound="ProjectGridView_DataBound">
         <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
         <Columns>
-            <asp:BoundField DataField="Идентификатор_Проекта" HeaderText="ID" ReadOnly="True" SortExpression="Идентификатор_Проекта" />
+            <asp:BoundField DataField="Идентификатор_Проекта" HeaderText="Идентификатор" ReadOnly="True" SortExpression="Идентификатор_Проекта" />
             <asp:BoundField DataField="Название" HeaderText="Название" SortExpression="Название" />
             <asp:BoundField DataField="Описание" HeaderText="Описание" SortExpression="Описание" />
-            <asp:BoundField DataField="Финансирование" HeaderText="Финансирование" SortExpression="Финансирование" />
+            <asp:BoundField DataField="Финансирование" HeaderText="Финансирование" SortExpression="Финансирование" DataFormatString="{0:.00}" />
             <asp:BoundField DataField="Идентификатор_Члена_Партии" ReadOnly="True" SortExpression="Идентификатор_Члена_Партии" HeaderText="Руководитель" />
             <asp:ButtonField ButtonType="Button" CommandName="EditRow" Text="Изменить" />
             <asp:ButtonField ButtonType="Button" CommandName="DeleteRow" Text="Удалить" />

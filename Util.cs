@@ -105,6 +105,7 @@ namespace coursedb
             cmd.Parameters.AddWithValue("@FirstName", values[2]);
             cmd.Parameters.AddWithValue("@MiddleName", values[3]);
             cmd.Parameters.AddWithValue("@Sex", values[4]);
+            DateTime bday = DateTime.Parse(values[5].ToString());
             cmd.Parameters.AddWithValue("@Birthday", values[5]);
             cmd.Parameters.AddWithValue("@Phone", values[6]);
             cmd.Parameters.AddWithValue("@Email", values[7]);
@@ -192,6 +193,7 @@ namespace coursedb
             cmd.Parameters.AddWithValue("@Id", values[0]);
             cmd.Parameters.AddWithValue("@Date", values[1]);
             cmd.Parameters.AddWithValue("@Desc", values[2]);
+            cmd.Parameters.AddWithValue("@Address", values[3]);
             Exec(cmd);
         }
 

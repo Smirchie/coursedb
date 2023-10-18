@@ -5,10 +5,10 @@
     <main>
         
      <asp:Button ID="InsertButton" Text ="Добавить" runat="server" OnClick ="InsertDept"/>
-    <asp:GridView ID="DeptGridView" runat="server" AutoGenerateColumns="False" Width="1000px" DataKeyNames="Идентификатор_Отделения" DataSourceID="DeptDataSource" AllowPaging="True" AllowSorting="True" CellPadding="4" ForeColor="#333333" GridLines="None" OnRowCommand="DeptRowCommand" ShowHeaderWhenEmpty ="True">
+    <asp:GridView ID="DeptGridView" runat="server" AutoGenerateColumns="False" Width="1200px" DataKeyNames="Идентификатор_Отделения" DataSourceID="DeptDataSource" AllowPaging="True" AllowSorting="True" CellPadding="4" ForeColor="#333333" GridLines="None" OnRowCommand="DeptRowCommand" ShowHeaderWhenEmpty ="True" OnDataBound="DeptGridView_DataBound">
         <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
         <Columns>
-            <asp:BoundField DataField="Идентификатор_Отделения" HeaderText="ID" ReadOnly="True" SortExpression="Идентификатор_Отделения" />
+            <asp:BoundField DataField="Идентификатор_Отделения" HeaderText="Идентификатор" ReadOnly="True" SortExpression="Идентификатор_Отделения" />
             <asp:BoundField DataField="Номер_Региона" HeaderText="Номер Региона" SortExpression="Номер_Региона" />
             <asp:BoundField DataField="Адрес" HeaderText="Адрес" SortExpression="Адрес" />
             <asp:BoundField DataField="Сайт" HeaderText="Сайт" SortExpression="Сайт" />

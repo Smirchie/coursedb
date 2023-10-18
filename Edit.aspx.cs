@@ -52,7 +52,9 @@ namespace coursedb
 
         private void AddAppealElems()
         {
-            NewDropDownList("ID Отделеня", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"), values[1]);
+            NewApplyButton();
+            NewCancelButton();
+            NewDropDownList("Идентификатор Отделеня", Util.GetValuesFromTable("Отделение", "Идентификатор_Отделения"), values[1]);
             NewLabel("Данные отправителя");
             NewTextBox("Фамилия", values[2]);
             NewTextBox("Имя", values[3]);
@@ -61,12 +63,12 @@ namespace coursedb
             NewTextBox("Телефон", values[6]);
             NewTextBox("E-mail", values[7]);
             NewTextBox("Текст обращения", values[8]);
-            NewApplyButton();
-            NewCancelButton();
         }
 
         private void AddDeptElems()
         {
+            NewApplyButton();
+            NewCancelButton();
             if (values[1] != null)
             {
                 NewTextBox("Номер региона", values[1].ToString());
@@ -79,35 +81,50 @@ namespace coursedb
             NewTextBox("Сайт", values[3]);
             NewTextBox("Телефон", values[4]);
             NewDropDownList("Руководитель", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[5]);
-            NewApplyButton();
-            NewCancelButton();
         }
 
         private void AddProjectElems()
         {
-            NewTextBox("Название", values[1]);
-            NewTextBox("Описание", values[2]);
-            NewTextBox("Финансирование", values[3]);
-            NewDropDownList("Руководитель", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
             NewApplyButton();
             NewCancelButton();
+            NewTextBox("Название", values[1]);
+            NewTextBox("Описание", values[2]);
+            try
+            {
+                NewTextBox("Финансирование", values[3].ToString());
+            }
+            catch
+            {
+                NewTextBox("Финансирование", null);
+            }
+            NewDropDownList("Руководитель", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
         }
 
         private void AddMemberElems()
         {
+            NewApplyButton();
+            NewCancelButton();
             NewTextBox("Фамилия", values[1]);
             NewTextBox("Имя", values[2]);
             NewTextBox("Отчество", values[3]);
             NewDropDownList("Пол", new string[] { "Мужской", "Женский" }, values[4]);
-            NewCalendar("Дата рождения", values[5]);
+            try
+            {
+                DateTime bday = (DateTime)values[5];
+                NewTextBox("Дата рождения", bday.ToShortDateString());
+            }
+            catch
+            {
+                NewTextBox("Дата рождения", null);
+            }
             NewTextBox("Телефон", values[6]);
             NewTextBox("E-mail", values[7]);
-            NewApplyButton();
-            NewCancelButton();
         }
 
         private void AddEventElems()
         {
+            NewApplyButton();
+            NewCancelButton();
             string[] hArr = new string[24];
             string[] mArr = new string[60];
             for (int h = 0; h < 24; h++)
@@ -146,9 +163,8 @@ namespace coursedb
                 NewDropDownList(":", mArr, null);
             }
             NewTextBox("Описание", values[2]);
-            NewCheckBoxList("Участники", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[3]);
-            NewApplyButton();
-            NewCancelButton();
+            NewTextBox("Адрес", values[3]);
+            NewCheckBoxList("Участники", Util.GetValuesFromTable("Член_Партии", "Идентификатор_Члена_Партии, Фамилия"), values[4]);
         }
 
         private void RedirectBack(object sender, EventArgs e)
@@ -287,6 +303,10 @@ namespace coursedb
                     case 1:
                         {
                             Util.InsertOrUpdateEvent(lst.ToArray());
+                            if (values[0] != null)
+                            {
+                                Util.DeleteLink((int)values[0]);
+                            }
                             foreach (int memberId in memberIdLst)
                             {
                                 if (values[0] is null)
@@ -363,6 +383,16 @@ namespace coursedb
             if (textStr != null)
             {
                 tb.Text = textStr;
+            }
+            if (id == "Текст обращения" || id == "Описание" || id == "Адрес")
+            {
+                tb.TextMode = TextBoxMode.MultiLine;
+                if (id == "Текст обращения")
+                {
+                    tb.MaxLength = 2048;
+                    tb.Width = 600;
+                    tb.Rows = 10;
+                }
             }
             EditPanel.Controls.Add(tb);
             BrLabel();
@@ -450,6 +480,7 @@ namespace coursedb
             Button btn = new Button() { ID = "CancelBtn", Text = "Отменить" };
             btn.Command += RedirectBack;
             EditPanel.Controls.Add(btn);
+            BrLabel();
         }
 
         private void BrLabel()
