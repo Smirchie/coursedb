@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.SessionState;
 using System.Web.Configuration;
 using System.Web.UI.WebControls;
-using System.Security.Cryptography;
 using System.Data;
 using Microsoft.Ajax.Utilities;
-using System.Data.Common;
 
 namespace coursedb
 {
